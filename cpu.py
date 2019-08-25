@@ -91,6 +91,17 @@ class BotCPU:
         ('AL', lambda n, z, c, v: True),
         ('NV', lambda n, z, c, v: False),
     ]
+
+    # (name, cost, ends turn?)
+    SYSCALLS = [
+        ('GET-POS', 50, False),
+        ('GET-CLOSEST', 10, False),
+        ('GET-CLOSEST-OTHER', 10, False),
+        ('GET-CLOSEST-POINT', 25, False),
+        ('GET-TILE', 25, False),
+        ('MOVE', 200, True),
+        ('YIELD', 0, True)
+    ]
     
     def decode(instr):
         def field(off, L):
@@ -121,7 +132,7 @@ class BotCPU:
         self.regs[r] = x & 0xFFFF
 
     
-    def step(self):
+    def step(self, syscall_handler):
         # Decode
         instr = self.memory[self.pc()]
         opcode, R, imm, cond = BotCPU.decode(instr)
@@ -157,8 +168,7 @@ class BotCPU:
                 # set two bytes before jump target since we will increment PC (note: cells are 2-byte)
                 self.set_reg(BotCPU.PC, imm - 1)
         elif name == 'SYSCALL':
-            # TODO
-            print(self.regs[R[0]])
+            self.regs[R[0]] = syscall_handler(imm, self.regs[R[0]])
         else:
             raise "Unknown instruction " + name
 
