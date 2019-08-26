@@ -2,8 +2,10 @@ var size = 640;
 var n = 64;
 var game = [];
 var board = [];
+var meta = {};
 var currTurn = 0;
 var autoTimer;
+let playerCol = ['255, 0, 0', '0, 255, 0', '0, 0, 255', '0, 255, 255', '255, 0, 255', '127, 0, 0', '255, 127, 0', '0, 127, 0'];
 
 function drawGrid(ctx) {
     let b = size / n;
@@ -26,7 +28,6 @@ function drawGrid(ctx) {
 
 function drawUnit(ctx, i, j, player) {
     let b = size / n;
-    let playerCol = ['255, 0, 0', '0, 255, 0', '0, 0, 255', '0, 140, 140'];
     ctx.fillStyle = 'rgba(' + playerCol[player] + ', 0.7)';
     ctx.fillRect(i*b + 1, j*b + 1, b - 2, b - 2);
 }
@@ -44,17 +45,25 @@ function drawWall(ctx, i, j) {
 }
 
 async function loadGame(uri) {
-    let response = await fetch(uri);
+    let response = await fetch(uri, {cache: "reload"});
     let data = await response.text();
-    console.log(data)
     let json = data.replace(/\n/g, "").replace(/'/g, "\"").replace(/True/g, "true").replace(/False/g, "false").replace(/\(/g, '[').replace(/\)/g, ']');
     return await JSON.parse(json);
+}
+
+function friendlyName(name) {
+    name = name.replace("programs/", "").replace(".A.bin", "").replace(".B.bin", "").replace(".C.bin", "");
+    if(/^player[1-8]$/.exec(name)) {
+        players = ["Robot 1", "Robot 2", "Robot 3", "Robot 4", "Robot 5", "Robot 6", "Robot 7", "Robot 8"];
+        name = players[name.substr(6) - 1];
+    }
+    return name;
 }
 
 function drawState(turn) {
     var canvas = document.getElementById("world");
     var ctx = canvas.getContext("2d");
-    document.getElementById("currTurn").innerHTML = "Current turn: " + turn;
+    document.getElementById("currTurn").innerHTML = "Trenutni potez: " + turn;
     
     state = game[turn];
     
@@ -69,16 +78,17 @@ function drawState(turn) {
         drawPoint(ctx, point[0], point[1]);
     }
 
-    let playerCol = ['255, 0, 0', '0, 255, 0', '0, 0, 255', '0, 140, 140'];
+
 
     var energies = document.getElementById("energies");
-    var statTable = "<table><tr><th>Player</th><th>Score</th><th>Energy</th><th>Debug</th></tr>"
+    var statTable = "<table><tr><th>Robot</th><th>Poeni</th><th>Energija</th><th>Debug</th></tr>"
     for(const [i, bot] of state.bots.entries()) {
         let col = "rgba(" + playerCol[i] + ", 0.1)"
         let energy = bot.energy;
         if(!bot.alive)
             energy = "&mdash;"
-        statTable += "<tr style=\"background-color:" + col + ";\"><td>" + i + "</td><td>" + bot.points + "</td><td>" + energy + "</td><td>" + bot.debug + "</td></tr>"
+        botName = friendlyName(meta.players[i]);
+        statTable += "<tr style=\"background-color:" + col + ";\"><td>" + botName + "</td><td>" + bot.points + "</td><td>" + energy + "</td><td>" + bot.debug + "</td></tr>"
     }
     statTable += "</table>"
     energies.innerHTML = statTable;
@@ -90,10 +100,20 @@ async function init() {
 
     size = canvas.width;
     currTurn = 0;
-    
-    data = await loadGame('/log.txt');
-    game = data.turns;
-    board = data.board;
+
+    game = window.location.search.substr(1);
+    ok = /^[a-zA-Z0-9_.]+$/
+    if(!ok.exec(game))
+        game = "";
+    else
+        game = "logs/" + game;
+
+    if(game) {
+        data = await loadGame(game);
+        game = data.turns;
+        board = data.board;
+        meta = data.meta;
+    }
     drawState(currTurn);
 }
 
@@ -112,6 +132,7 @@ async function drawPrev() {
 }
 
 function startAuto() {
+    clearInterval(autoTimer);
     autoTimer = setInterval(drawNext, 250);
 }
 

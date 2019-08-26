@@ -2,15 +2,13 @@
   <head>
     <meta charset="utf-8" /> 
     <script type="text/javascript" src="visualiser.js"></script>
+    <link rel="stylesheet" type="text/css" href="/style.css" />
     <style type="text/css">
-      canvas { border: 1px solid black; }
-      table { border: 1px solid black; }
-      td, th { text-align: center; vertical-align: center; padding: 6px;}
-      .box { display: flex; flex-wrap: wrap; }
-      .item { padding: 10px;}
+      body { max-width: unset; }
     </style>
   </head>
   <body onload="init();">
+    <h1>Vizuelizacija partije</h1>
     <div class="box">
       <div class="item">
         <canvas id="world" width="768" height="768">
@@ -32,6 +30,9 @@
           <button onclick="startAuto();">Play</button>
           <button onclick="clearInterval(autoTimer);">Pause</button>
           <button onclick="gotoStart();">Reset</button>
+        </p>
+        <p>
+          <a href="index.html">Nazad</a>
         </p>
       </div>
     </div>

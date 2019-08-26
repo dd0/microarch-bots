@@ -1,3 +1,5 @@
+% Mikrokontroler
+
 # Procesor
 
 Roboti koje programirate pokreće jednostavan procesor, sa arhitekturom
@@ -150,3 +152,5 @@ Na raspolaganju su sledeće operacije:
 Za operacije koje čitaju ili vraćaju poziciju, pozicija je opisana kao
 12-bitni broj, gde gornjih šest bita predstavlja red, a donjih šest
 kolonu.
+
+[Nazad](../index.html)

@@ -1,0 +1,42 @@
+body {
+    color: #2e3436;
+    background: #ededed;
+    font-size: 1em;
+    line-height: 1.4em;
+    max-width: 60em;
+    margin: auto;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-top: 2em;
+}
+
+blockquote {
+    margin: 1em 0.5em 1em 5em;
+    font-style: italic;
+}
+
+pre {
+    margin-left: 2em;
+    line-height: 1.1em!important;
+}
+
+li { padding: 3px; }
+
+
+.checkboxes label {
+    display: inline-block;
+    padding-right: 10px;
+    white-space: nowrap;
+}
+.checkboxes input {
+    vertical-align: middle;
+}
+.checkboxes label span {
+    vertical-align: middle;
+}
+
+canvas { border: 1px solid black; }
+table { border: 1px solid black; }
+td, th { text-align: center; vertical-align: center; padding: 6px;}
+.box { display: flex; flex-wrap: wrap; }
+.item { padding: 10px;}
