@@ -71,25 +71,30 @@ class World:
     ENERGY_PER_TURN = 100
     STARTING_ENERGY = 100000
     INVALID_POS = SIZE - 1, SIZE
+    MAX_POINTS = 100
     
     def __init__(self, codes, map_class, seed=None):
         self.r = random.Random(seed)
 
         map_generator = map_class(World.SIZE, seed)
         self.board = map_generator.generate()
-        
+
+        self.generated_points = 0
         self.points = []
         self.bots = []
-
-        # This must be a loop to avoid missing checks for overlapping points
-        for _ in range(10):
-            self.points.append(self.random_empty())
         
         for code in codes:
             self.bots.append(Bot(code, self.random_empty()))
 
         self.current_tick = 0
 
+
+    def generate_points(self):
+        for _ in range(10):
+            if self.generated_points < World.MAX_POINTS:
+                self.points.append(self.random_empty())
+                self.generated_points += 1
+                
 
     def random_empty(self):
         while True:
@@ -216,6 +221,8 @@ class World:
                     bot.score_point()
 
         self.points = [p for p in self.points if not any(p == bot.pos for bot in self.bots)]
+        if len(self.points) == 0:
+            self.generate_points()
 
 
     def run_with_log(self, n_ticks, meta={}):

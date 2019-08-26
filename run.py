@@ -16,7 +16,7 @@ def main():
     bots = []
     for player in args.players:
         with open(player, 'r') as f:
-            code = f.read()
+            code = f.read().strip()
             parsed = []
             for i in range(0, len(code), 4):
                 parsed.append(int(code[i:i+4], 16))
