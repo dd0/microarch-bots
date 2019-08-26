@@ -1,6 +1,6 @@
 % Mikrokontroler
 
-# Procesor
+## Procesor
 
 Roboti koje programirate pokreće jednostavan procesor, sa arhitekturom
 koja je pomalo slična mikrokontrolerima, ali sa nekoliko bitnih
@@ -39,9 +39,9 @@ poteza.
 
 Dodatno, instrukcije za kretanje uvek završavaju potez.
 
-# Instrukcije
+## Instrukcije
 
-## Format
+### Format
 
 Instrukcije su u memoriji predstavljene kao 16-bitni brojevi. Prvih
 pet bita gledano sa leva (najtežih) predstavljaju kod instrukcije, dok
@@ -57,48 +57,48 @@ bita "viška" na kraju, koje procesor ignoriše.
 Operacija uslovnog skoka `B.cond` je izuzetak od ovog formata, i
 detaljnije je opisana dole.
 
-## Spisak instrukcija
+### Spisak instrukcija
 
 U sledećoj tabeli je dat spisak podržanih instrukcija i njihovih
 kodova. U tabeli, `Rx` predstavlja proizvoljan registar, a `imm` broj.
 
-Kod  Instrukcija        Efekat
----  -----------        ------
-  0  MOV Rd, Ra         Rd = Ra
-  1  MOV Rd, imm        Rd = imm
-  2  ADD Rd, Ra, Rb     Rd = Ra + Rb
-  3  ADD Rd, Ra, imm    Rd = Ra + imm
-  4  SUB Rd, Ra, Rb     Rd = Ra - Rb
-  5  SUB Rd, Ra, imm    Rd = Ra - imm
-  6  SHL Rd, Ra, Rb     Rd = Ra << Rb
-  7  SHL Rd, Ra, imm    Rd = Ra << imm
-  8  SHR Rd, Ra, Rb     Rd = Ra >> Rb
-  9  SHR Rd, Ra, imm    Rd = Ra >> imm
- 10  AND Rd, Ra, Rb     Rd = Ra & Rb
- 11  AND Rd, Ra, imm    Rd = Ra & imm
- 12  OR Rd, Ra, Rb      Rd = Ra | Rb
- 13  OR Rd, Ra, imm     Rd = Ra | imm
- 14  XOR Rd, Ra, Rb     Rd = Ra ^ Rb
- 15  XOR Rd, Ra, imm    Rd = Ra | imm
- 16  LOAD Rd, Ra, Rb    Rd = mem[Ra + Rb]
- 17  LOAD Rd, Ra, imm   Rd = mem[Ra + imm]
- 18  STORE Rs, Ra, Rb   mem[Ra + Rb] = Rs
- 19  STORE Rs, Ra, imm  mem[Ra + imm] = Rs
- 20  PUSH Rs            push(Rs)
- 21  PUSH imm           push(imm)
- 22  POP Rd             Rd = pop()
- 23  CMP Ra, Rb         utiče na ponašanje `B.cond` (videti dole)
- 24  CMP Ra, imm        isto
- 25  B.cond imm         uslovni skok
- 26  B imm              bezuslovni skok
- 27  SYSCALL Rx, imm    interakcija sa svetom
+Kod  Instrukcija          Efekat
+---  ------------         ------
+  0  `MOV Rd, Ra`         Rd = Ra
+  1  `MOV Rd, imm`        Rd = imm
+  2  `ADD Rd, Ra, Rb`     Rd = Ra + Rb
+  3  `ADD Rd, Ra, imm`    Rd = Ra + imm
+  4  `SUB Rd, Ra, Rb`     Rd = Ra - Rb
+  5  `SUB Rd, Ra, imm`    Rd = Ra - imm
+  6  `SHL Rd, Ra, Rb`     Rd = Ra << Rb
+  7  `SHL Rd, Ra, imm`    Rd = Ra << imm
+  8  `SHR Rd, Ra, Rb`     Rd = Ra >> Rb
+  9  `SHR Rd, Ra, imm`    Rd = Ra >> imm
+ 10  `AND Rd, Ra, Rb`     Rd = Ra & Rb
+ 11  `AND Rd, Ra, imm`    Rd = Ra & imm
+ 12  `OR Rd, Ra, Rb`      Rd = Ra | Rb
+ 13  `OR Rd, Ra, imm`     Rd = Ra | imm
+ 14  `XOR Rd, Ra, Rb`     Rd = Ra ^ Rb
+ 15  `XOR Rd, Ra, imm`    Rd = Ra | imm
+ 16  `LOAD Rd, Ra, Rb`    Rd = mem[Ra + Rb]
+ 17  `LOAD Rd, Ra, imm`   Rd = mem[Ra + imm]
+ 18  `STORE Rs, Ra, Rb`   mem[Ra + Rb] = Rs
+ 19  `STORE Rs, Ra, imm`  mem[Ra + imm] = Rs
+ 20  `PUSH Rs`            push(Rs)
+ 21  `PUSH imm`           push(imm)
+ 22  `POP Rd`             Rd = pop()
+ 23  `CMP Ra, Rb`         utiče na ponašanje `B.cond` (videti dole)
+ 24  `CMP Ra, imm`        isto
+ 25  `B.cond imm`         uslovni skok
+ 26  `B imm`              bezuslovni skok
+ 27  `SYSCALL Rx, imm`    interakcija sa svetom
 
-### Bezuslovni skok
+#### Bezuslovni skok
 
 Instrukcija bezuslovnog skoka `B imm` skače na adresu `imm`, tako da
 je sledeća instrukcija koja će biti izvršena ona na adresi `imm`.
 
-### Uslovni skok
+#### Uslovni skok
 
 Instrukcije `CMP` i `B.cond` služe za uslovne skokove: prvo je
 potrebno izvršiti `CMP` da bi se uporedila dva registra, čiji će se
@@ -116,7 +116,7 @@ do skoka došlo, i na kraju adresu. Neki korisni uslovi su:
 * `1100`: Ra > Rb
 * `1101`: Ra <= Rb
 
-### Interakcija sa svetom
+#### Interakcija sa svetom
 
 Instrukcija `SYSCALL Rx, imm` služi za interakciju sa ostatkom sveta
 (van robota). Parametar `imm` bira vrstu interakcije, a `Rx` se

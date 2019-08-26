@@ -1,6 +1,6 @@
 % Alati
 
-# Arena
+## Arena
 
 Da bi pokrenuli partiju sa robotima čiji programi su `robot1.bin`,
 `robot2.bin` i `robot3.bin`, i sačuvali log partije u `log.txt`:
@@ -13,7 +13,7 @@ Takođe su na raspolaganju parametri `--seed SEED` (da bi dobili
 konzistentne partije) i `-m tip-mape` koji bira generator mapa (jedan
 od `empty`, `blocks`, `cave`).
 
-# Asembler
+## Asembler
 
 Da bi lakše počeli, na raspolaganju je program `asm.py`, koji od fajla
 koji sadrži kod u asembleru za kontroler robota generiše program koji
@@ -29,7 +29,7 @@ parametrom `--format` se može odabrati alternativni format izlaza:
 binarni fajl (`--format raw`) ili niz brojeva (`--format array`),
 ukoliko vam je to korisno kao među-format za dalje procesiranje.
 
-# Server
+## Server
 
 Da bi imali pristup vizuelizacijama prethodnih partija, neophodno je
 da pokrenete kopiju servera iz direktorijuma `frontend`:
