@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 from cpu import BotCPU
+import map
 import random
 
 class Bot:
@@ -73,7 +74,10 @@ class World:
     
     def __init__(self, codes, seed=None):
         self.r = random.Random(seed)
-        self.board = [[' ' for j in range(World.SIZE)] for i in range(World.SIZE)]
+
+        map_generator = map.Map(World.SIZE, seed)
+        self.board = map_generator.generate()
+        
         self.points = []
         self.bots = []
 
