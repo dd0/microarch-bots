@@ -75,7 +75,7 @@ class World:
     def __init__(self, codes, seed=None):
         self.r = random.Random(seed)
 
-        map_generator = map.Map(World.SIZE, seed)
+        map_generator = map.CaveMap(World.SIZE, seed)
         self.board = map_generator.generate()
         
         self.points = []
@@ -87,6 +87,8 @@ class World:
         
         for code in codes:
             self.bots.append(Bot(code, self.random_empty()))
+
+        self.current_tick = 0
 
 
     def random_empty(self):
@@ -147,6 +149,7 @@ class World:
 
     
     def tick(self):
+        self.current_tick += 1
         pending_moves = [None for _ in self.bots]
         
         def make_handler(me):
@@ -205,7 +208,7 @@ class World:
 
         self.points = [p for p in self.points if not any(p == bot.pos for bot in self.bots)]
 
-        print(self.state())
+        print("," if self.current_tick != 1 else "", self.state())
 
 
 spin = [2048, 55301, 2050, 55301, 2049, 55301, 2051, 55301, 53248]
@@ -216,5 +219,9 @@ seeker = [3391, 55296, 18694, 21012, 55299, 19206, 21524, 47456, 51214, 52620, 2
 
 world = World([to_zero, nop, spin, seeker])
 
+print('{ "board": ', world.board, ', "turns": [')
+
 for _ in range(400):
     world.tick()
+
+print("]}")

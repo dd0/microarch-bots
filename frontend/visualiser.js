@@ -1,6 +1,7 @@
 var size = 640;
 var n = 64;
 var game = [];
+var board = [];
 var currTurn = 0;
 var autoTimer;
 
@@ -16,6 +17,11 @@ function drawGrid(ctx) {
         ctx.lineTo(i*b, size - 1);
     }
     ctx.stroke();
+
+    for(var i = 0; i < n; i++)
+        for(var j = 0; j < n; j++)
+            if(board[i][j] == '#')
+                drawWall(ctx, i, j);
 }
 
 function drawUnit(ctx, i, j, player) {
@@ -31,10 +37,16 @@ function drawPoint(ctx, i, j) {
     ctx.fillRect(i*b + 1, j*b + 1, b - 2, b - 2);    
 }
 
+function drawWall(ctx, i, j) {
+    let b = size / n;
+    ctx.fillStyle = 'rgba(60, 60, 60, 0.7)';
+    ctx.fillRect(i*b + 1, j*b + 1, b - 2, b - 2);    
+}
+
 async function loadGame(uri) {
     let response = await fetch(uri);
     let data = await response.text();
-    let json = '[' + data.replace(/\n/g, "\n,").replace(/'/g, "\"").replace(/True/g, "true").replace(/False/g, "false").replace(/\(/g, '[').replace(/\)/g, ']').slice(0, -2) + ']';
+    let json = data.replace(/\n/g, "").replace(/'/g, "\"").replace(/True/g, "true").replace(/False/g, "false").replace(/\(/g, '[').replace(/\)/g, ']');
     return await JSON.parse(json);
 }
 
@@ -75,7 +87,9 @@ async function init() {
     size = canvas.width;
     currTurn = 0;
     
-    game = await loadGame('/log.txt');
+    data = await loadGame('/log.txt');
+    game = data.turns;
+    board = data.board;
     drawState(currTurn);
 }
 

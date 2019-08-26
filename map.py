@@ -64,3 +64,43 @@ class Map:
         return n_empty >= self.n * self.n // 5
 
 
+class RocksMap(Map):
+    def build(self):
+        def place_block(i, j, ttl, first=False):
+            if i < 0 or j < 0 or i >= self.n or j >= self.n:
+                return
+            if ttl <= 0 or (self.R.random() < 0.6 and not first):
+                return
+
+            self.board[i][j] = '#'
+            for (di, dj) in [(-1,0), (1,0), (0,-1), (0,1)]:
+                place_block(i + di, j + dj, ttl - 1)
+            for (di, dj) in [(-1,-1), (-1,1), (1,-1), (1,1)]:
+                place_block(i + di, j + dj, ttl - 1.4)
+
+        for _ in range(20):
+            place_block(random.randrange(self.n), random.randrange(self.n), random.randrange(2, 6), True)
+
+
+class CaveMap(Map):
+    def build(self):
+        for i in range(self.n):
+            for j in range(self.n):
+                self.board[i][j] = '#' if self.R.random() < 0.45 else ' '
+
+        for _ in range(2):
+            self.erode()
+
+
+    def erode(self):
+        adj_walls = [[sum(sum(1 for tile in row[j-1:j+2] if tile == '#')
+                          for row in self.board[i-1:i+2])
+                      for j in range(self.n)]
+                     for i in range(self.n)]
+
+        far_walls = [[sum(sum(1 for tile in row[j-2:j+3] if tile == '#')
+                          for row in self.board[i-2:i+3])
+                      for j in range(self.n)]
+                     for i in range(self.n)]
+
+        self.board = [['#' if a >= 5 or f <= 1 else ' ' for a, f in zip(adj, far)] for adj, far in zip(adj_walls, far_walls)]
