@@ -2,6 +2,7 @@
 from cpu import BotCPU
 import sys
 import struct
+import argparse
 
 
 def asm_instruction(line):
@@ -33,13 +34,13 @@ def asm_instruction(line):
             res = (res << l) | (v & (2**l - 1))
         return res
 
-    print(line)
-    print(instr, opcode, params, fmt)
+    #print(line)
+    #print(instr, opcode, params, fmt)
 
     regs = {'R0': 0, 'R1': 1, 'R2': 2, 'R3': 3, 'R4': 4, 'R5': 5, 'SP': 6, 'PC': 7}
     params = [int(regs.get(p, p)) for p in params]
 
-    print(instr, opcode, params, fmt)
+    #print(instr, opcode, params, fmt)
     
     if fmt == 'R':
         while len(params) < 3: params.append(0)
@@ -57,12 +58,28 @@ def asm_instruction(line):
         
 
 def main():
-    #code = b''
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input', type=argparse.FileType('r'), default=sys.stdin)
+    parser.add_argument('-o', '--output', type=argparse.FileType('wb'), default=sys.stdout.buffer)
+    parser.add_argument('--format', choices=['hex', 'raw', 'array'], default='hex')
+    args = parser.parse_args()
+    
     code = []
-    for line in sys.stdin:
-        #code += struct.pack('>H', asm_instruction(line.strip()))
+    for line in args.input:
         code.append(asm_instruction(line.strip()))
-    print(code)
+
+    output = None
+    if args.format == 'hex':
+        output = ''.join('%04x' % c for c in code).encode('utf-8')
+    elif args.format == 'raw':
+        output = struct.pack('<%dH' % len(code), *code)
+    elif args.format == 'array':
+        output = str(code).encode('utf-8')
+
+    output += b'\n'
+
+    args.output.write(output)
+        
     
 if __name__ == '__main__':
     main()
