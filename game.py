@@ -124,7 +124,7 @@ class World:
         
         # Collision, ugly hack
         if len([b for b in self.bots if b.get_pos() == pos]) > 1:
-            return False
+            return True
         
         return self.board[i][j] == '#'
     
