@@ -2,8 +2,10 @@
 import cgi
 import re
 import os
+import json
 
 PROG_DIR = "programs"
+TOKEN_FILE = "../config/tokens.json"
 
 def atomic_write(fname, data):
     temp = fname + ".tmp"
@@ -23,8 +25,12 @@ if "program" not in form:
 program = form["program"].value
 program = re.sub('[^a-fA-F0-9]', "", program)
 
+token_config = None
+with open(TOKEN_FILE, 'r') as f:
+    token_config = json.loads(f.read())
+
 token = form.getvalue("token", "")
-user_tokens = {"test": "player1", "token_2": "player2"}
+user_tokens = {a['token'] : a['name'] for a in token_config}
 if token not in user_tokens:
     print("Error: invalid token!")
     exit(0)
