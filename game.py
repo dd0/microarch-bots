@@ -82,6 +82,8 @@ class World:
         self.generated_points = 0
         self.points = []
         self.bots = []
+
+        self.generate_points()
         
         for code in codes:
             self.bots.append(Bot(code, self.random_empty()))
