@@ -93,13 +93,13 @@ class CaveMap(Map):
 
 
     def erode(self):
-        adj_walls = [[sum(sum(1 for tile in row[j-1:j+2] if tile == '#')
-                          for row in self.board[i-1:i+2])
+        adj_walls = [[sum(sum(1 for tile in row[max(j-1,0):j+2] if tile == '#')
+                          for row in self.board[max(i-1,0):i+2])
                       for j in range(self.n)]
                      for i in range(self.n)]
 
-        far_walls = [[sum(sum(1 for tile in row[j-2:j+3] if tile == '#')
-                          for row in self.board[i-2:i+3])
+        far_walls = [[sum(sum(1 for tile in row[max(j-2,0):j+3] if tile == '#')
+                          for row in self.board[max(i-2,0):i+3])
                       for j in range(self.n)]
                      for i in range(self.n)]
 
