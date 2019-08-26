@@ -69,6 +69,7 @@ class Bot:
 class World:
     SIZE = 64
     ENERGY_PER_TURN = 100
+    STARTING_ENERGY = 100000
     INVALID_POS = SIZE - 1, SIZE
     
     def __init__(self, codes, map_class, seed=None):
@@ -158,6 +159,7 @@ class World:
                     return 0, 0, True
             
                 name = BotCPU.SYSCALLS[imm][0]
+                cost = BotCPU.SYSCALLS[imm][1]
 
                 if name == 'GET-POS':
                     res = World.encode_pos(self.bots[me].get_pos())
@@ -167,11 +169,17 @@ class World:
                 if name == 'GET-CLOSEST-OTHER':
                     res =  World.encode_pos(World.closest(World.decode_pos(param),
                                                         [b.get_pos() for i, b in enumerate(self.bots) if i != me and b.alive()]))
-                if name == 'GET-CLOSEST-POINT':
-                    res = World.encode_pos(World.closest(World.decode_pos(param), self.points))
+                if name == 'GET-POINT':
+                    if param >= len(self.points):
+                        res = World.INVALID_POS
+                    else:
+                        res = World.encode_pos(self.points[param])
+                    #res = World.encode_pos(World.closest(World.decode_pos(param), self.points))
                 if name == 'GET-TILE':
                     i, j = World.decode_pos(param)
                     res = 0 if self.board[i][j] == ' ' else 1
+                    if current_tick == 1:
+                        cost = 1
                 if name == 'MOVE':
                     pending_moves[me] = param
                     res = param  # do not change
@@ -181,12 +189,15 @@ class World:
                     self.bots[me].debug = param
                     res = param
 
-                return res, BotCPU.SYSCALLS[imm][1], BotCPU.SYSCALLS[imm][2]
+                return res, cost, BotCPU.SYSCALLS[imm][2]
                 
             return handler
 
         for bot in self.bots:
-            bot.add_energy(World.ENERGY_PER_TURN)
+            if self.current_tick == 1:
+                bot.add_energy(World.STARTING_ENERGY)
+            else:
+                bot.add_energy(World.ENERGY_PER_TURN)
             
         for i, bot in enumerate(self.bots):
             bot.tick(make_handler(i))

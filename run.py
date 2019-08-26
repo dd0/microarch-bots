@@ -29,7 +29,7 @@ def main():
 
     meta = {'players': args.players, 'seed': args.seed if args.seed is not None else -1, 'map': args.map}
         
-    args.output.write(world.run_with_log(100, meta))
+    args.output.write(world.run_with_log(1000, meta))
     
 if __name__ == '__main__':
     main()

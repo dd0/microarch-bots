@@ -134,15 +134,16 @@ Na raspolaganju su sledeće operacije:
 * Pronađi najbližeg tuđeg robota datoj poziciji (`imm = 2`): u `Rx`
   zapisuje poziciju robota najbližeg poziciji datoj u `Rx`, ne
   računajući sebe. Cena: 10 instrukcija.
-* Pronađi poen najbliži datoj poziciji (`imm = 3`): u `Rx` zapisuje
-  poziciju poena najbližeg poziciji datoj u `Rx`. Cena: 25
-  instrukcija.
+* Pročitaj poziciju poena (`imm = 3`): u `Rx` zapisuje poziciju poena
+  sa indeksom datim u `Rx`. Ukoliko nema dovoljno poena, vraća
+  nevalidnu poziciju (`1<<12`). Cena: 5 instrukcija.
 * Proveri stanje polja (`imm = 4`): u `Rx` zapisuje 0 ukoliko je polje
   na poziciji datoj u `Rx` prohodno, a u suprotnom 1. Cena: 25
+  instrukcija, osim tokom prvog poteza, tokom kog je cena 1
   instrukcija.
 * Pomeri se (`imm = 5`): pomera robota jedno polje u pravcu datom u
   `Rx` (gore: 0, dole: 1, levo: 2, desno: 3). Cena: 200
-  instrukcija. **završava potez**.
+  instrukcija, **završava potez**.
 * Završi potez (`imm = 6`).
 * Debug (`imm = 7`): u "debug-registar" zapisuje vrednost u `Rx`. Ovo
   nije pravi registar, već izlazna vrednost koja se može videti tokom
