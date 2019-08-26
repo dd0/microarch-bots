@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <script type="text/javascript" src="visualiser.js"></script>
+    <style type="text/css">
+      canvas { border: 1px solid black; }
+      table { border: 1px solid black; }
+      td, th { text-align: center; vertical-align: center; padding: 6px;}
+    </style>
+  </head>
+  <body onload="init();">
+    <canvas id="world" width="768" height="768">
+      Error: <tt>canvas</tt> element not supported!
+    </canvas>
+    <br>
+    <button onclick="drawPrev();">&lt;</button>
+    <button onclick="drawNext();">&gt;</button>
+    <br>
+    <div id="currTurn">Loading...</div>
+    <br>
+    <div id="energies"></div>
+    <br>
+    <button onclick="startAuto();">Play</button>
+    <button onclick="clearInterval(autoTimer);">Pause</button>
+    <button onclick="gotoStart();">Reset</button>
+  </body>
+</html>

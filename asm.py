@@ -11,22 +11,21 @@ def asm_instruction(line):
     cond = None
     if '.' in instr:
         instr, cond = instr.split('.')
-    
-    else:
-        opcode, fmt = None, None
 
-        if instr == 'B':
-            opcode, fmt = (25, 'C') if cond else (26, 'O')
+    opcode, fmt = None, None
+    
+    if instr == 'B':
+        opcode, fmt = (25, 'C') if cond else (26, 'O')
+    else:
+        candidates = [(i, x[1]) for i, x in enumerate(BotCPU.OPERATIONS) if x[0] == instr]
+        if len(candidates) == 0:
+            raise Exception("Unknown instruction " + instr)
+        elif len(candidates) == 1:
+            opcode, fmt = candidates[0]
+        elif not params[-1].isnumeric():
+            opcode, fmt = candidates[0][0], 'R'
         else:
-            candidates = [(i, x[1]) for i, x in enumerate(BotCPU.OPERATIONS) if x[0] == instr]
-            if len(candidates) == 0:
-                raise "Unknown instruction " + instr
-            elif len(candidates) == 1:
-                opcode, fmt = candidates[0]
-            elif not params[-1].isnumeric():
-                opcode, fmt = candidates[0][0], 'R'
-            else:
-                opcode, fmt = candidates[0][0] + 1, ('I' if instr in ['CMP', 'MOV'] else 'D')
+            opcode, fmt = candidates[0][0] + 1, ('I' if instr in ['CMP', 'MOV'] else 'D')
 
     def encode(lens, vals):
         res = 0

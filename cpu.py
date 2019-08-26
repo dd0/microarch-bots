@@ -39,10 +39,10 @@ class BotCPU:
         ('ADD', 'D'),
         ('SUB', 'R'),
         ('SUB', 'D'),
-        ('LSH', 'R'),
-        ('LSH', 'D'),
-        ('RSH', 'R'),
-        ('RSH', 'D'),
+        ('SHL', 'R'),
+        ('SHL', 'D'),
+        ('SHR', 'R'),
+        ('SHR', 'D'),
         ('AND', 'R'),
         ('AND', 'D'),
         ('OR', 'R'),
@@ -66,8 +66,8 @@ class BotCPU:
     ARITH = {
         'ADD': lambda x, y: x + y,
         'SUB': lambda x, y: x - y,
-        'LSH': lambda x, y: x << y,
-        'RSH': lambda x, y: x >> y,
+        'SHL': lambda x, y: x << y,
+        'SHR': lambda x, y: x >> y,
         'AND': lambda x, y: x & y,
         'OR': lambda x, y: x | y,
         'XOR': lambda x, y: x ^ y
@@ -100,7 +100,8 @@ class BotCPU:
         ('GET-CLOSEST-POINT', 25, False),
         ('GET-TILE', 25, False),
         ('MOVE', 200, True),
-        ('YIELD', 0, True)
+        ('YIELD', 0, True),
+        ('DEBUG', 0, False)
     ]
     
     def decode(instr):
@@ -131,10 +132,33 @@ class BotCPU:
             raise "Register out of range"
         self.regs[r] = x & 0xFFFF
 
+
+    def get_mem(self, i):
+        if i < 0 or i >= len(self.memory):
+            return 0
+        return self.memory[i]
+
+
+    def set_mem(self, i, val):
+        if i < 0 or i >= len(self.memory):
+            return
+        self.memory[i] = val
+
+
+    def push(self, x):
+        self.set_reg(BotCPU.SP, (self.regs[BotCPU.SP] + 1) % len(self.stack))
+        self.stack[self.regs[BotCPU.SP]] = x
+
+
+    def pop(self):
+        res = self.stack[self.regs[BotCPU.SP]]
+        self.set_reg(BotCPU.SP, (self.regs[BotCPU.SP] - 1) % len(self.stack))
+        return res
+
     
     def step(self, syscall_handler):
         # Decode
-        instr = self.memory[self.pc()]
+        instr = self.get_mem(self.pc())
         opcode, R, imm, cond = BotCPU.decode(instr)
 
         name, fmt = BotCPU.OPERATIONS[opcode]
@@ -144,6 +168,10 @@ class BotCPU:
             params = self.regs[R[1]], self.regs[R[2]]
         elif fmt == 'D':
             params = self.regs[R[1]], imm
+        elif fmt == 'I':
+            params = [imm]
+
+        #print(name, R, imm)
 
         # Execute
         if name in BotCPU.ARITH:
@@ -160,7 +188,7 @@ class BotCPU:
             self.set_reg(R[0], self.pop())
         elif name == 'CMP':
             # flags are NZCV
-            res = params[0] - params[1]
+            res = self.regs[R[0]] - params[0]
             self.flags = res < 0, res == 0, res > 0xFFFF, res > 0x7FFF
         elif name == 'B':
             should_jump = BotCPU.COND[cond][1](*self.flags) if fmt == 'C' else True
@@ -174,3 +202,4 @@ class BotCPU:
 
         # next instruction
         self.set_reg(BotCPU.PC, self.pc() + 1)
+        #print(self.regs)
