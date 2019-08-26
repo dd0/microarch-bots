@@ -46,6 +46,7 @@ function drawWall(ctx, i, j) {
 async function loadGame(uri) {
     let response = await fetch(uri);
     let data = await response.text();
+    console.log(data)
     let json = data.replace(/\n/g, "").replace(/'/g, "\"").replace(/True/g, "true").replace(/False/g, "false").replace(/\(/g, '[').replace(/\)/g, ']');
     return await JSON.parse(json);
 }
@@ -74,7 +75,10 @@ function drawState(turn) {
     var statTable = "<table><tr><th>Player</th><th>Score</th><th>Energy</th><th>Debug</th></tr>"
     for(const [i, bot] of state.bots.entries()) {
         let col = "rgba(" + playerCol[i] + ", 0.1)"
-        statTable += "<tr style=\"background-color:" + col + ";\"><td>" + i + "</td><td>" + bot.points + "</td><td>" + bot.energy + "</td><td>" + bot.debug + "</td></tr>"
+        let energy = bot.energy;
+        if(!bot.alive)
+            energy = "&mdash;"
+        statTable += "<tr style=\"background-color:" + col + ";\"><td>" + i + "</td><td>" + bot.points + "</td><td>" + energy + "</td><td>" + bot.debug + "</td></tr>"
     }
     statTable += "</table>"
     energies.innerHTML = statTable;

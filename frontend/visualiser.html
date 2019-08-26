@@ -1,26 +1,39 @@
 <html>
   <head>
+    <meta charset="utf-8" /> 
     <script type="text/javascript" src="visualiser.js"></script>
     <style type="text/css">
       canvas { border: 1px solid black; }
       table { border: 1px solid black; }
       td, th { text-align: center; vertical-align: center; padding: 6px;}
+      .box { display: flex; flex-wrap: wrap; }
+      .item { padding: 10px;}
     </style>
   </head>
   <body onload="init();">
-    <canvas id="world" width="768" height="768">
-      Error: <tt>canvas</tt> element not supported!
-    </canvas>
-    <br>
-    <button onclick="drawPrev();">&lt;</button>
-    <button onclick="drawNext();">&gt;</button>
-    <br>
-    <div id="currTurn">Loading...</div>
-    <br>
-    <div id="energies"></div>
-    <br>
-    <button onclick="startAuto();">Play</button>
-    <button onclick="clearInterval(autoTimer);">Pause</button>
-    <button onclick="gotoStart();">Reset</button>
+    <div class="box">
+      <div class="item">
+        <canvas id="world" width="768" height="768">
+          Error: <tt>canvas</tt> element not supported!
+        </canvas>
+      </div>
+      <div class="item">
+        <p>
+          <div id="energies"></div>
+        </p>
+        <p>
+          <div id="currTurn">Loading...</div>
+        </p>
+        <p>
+          <button onclick="drawPrev();">&larr;</button>
+          <button onclick="drawNext();">&rarr;</button>
+        </p>
+        <p>
+          <button onclick="startAuto();">Play</button>
+          <button onclick="clearInterval(autoTimer);">Pause</button>
+          <button onclick="gotoStart();">Reset</button>
+        </p>
+      </div>
+    </div>
   </body>
 </html>

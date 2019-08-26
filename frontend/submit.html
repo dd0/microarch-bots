@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <meta charset="utf-8" /> 
+    <style type="text/css">
+      .checkboxes label {
+          display: inline-block;
+          padding-right: 10px;
+          white-space: nowrap;
+      }
+      .checkboxes input {
+          vertical-align: middle;
+      }
+      .checkboxes label span {
+          vertical-align: middle;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="/cgi-bin/submit.py" method="post">
+      <p>
+        <textarea rows=10 cols=70 placeholder="Program..." name="program"></textarea>
+      </p>
+      <p class="checkboxes">
+        Mape:
+        <input type="checkbox" name="mapA"><span>A</span></input>
+        <input type="checkbox" name="mapB"><span>B</span></input>
+        <input type="checkbox" name="mapC"><span>C</span></input>
+      </p>
+      <p>
+        <input type="text" name="token" placeholder="Token"></input>
+      </p>
+      <p>
+        <button>Submit</button>
+      </p>
+    </form>
+
+    <p>
+      Program se šalje kao hex string, gde prva četiri karaktera
+      predstavljaju prvu instrukciju, sledeća četiri drugu, i tako
+      dalje. Razmaci i novi redovi su dozvoljeni i ignorišu se.
+    </p>
+
+    <p>
+      Na primer, da bi poslali program <tt>MOV R0, 0; SYSCALL R0,
+        5</tt>, možete uneti string <tt>0800 d805</tt>.
+    </p>
+
+    <p>
+      Možete poslati specijalizovane programe za različite mape (tj.
+      odabrati za koje mape će se dati program koristiti).
+    </p>
+    
+    <p>
+      U polje "token" unesite tajni string koji identifikuje vašeg
+      robota.
+    </p>
+  </body>
+</html>
