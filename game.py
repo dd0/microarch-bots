@@ -1,6 +1,5 @@
 #! /usr/bin/env python3
 from cpu import BotCPU
-import map
 import random
 
 class Bot:
@@ -72,10 +71,10 @@ class World:
     ENERGY_PER_TURN = 100
     INVALID_POS = SIZE - 1, SIZE
     
-    def __init__(self, codes, seed=None):
+    def __init__(self, codes, map_class, seed=None):
         self.r = random.Random(seed)
 
-        map_generator = map.CaveMap(World.SIZE, seed)
+        map_generator = map_class(World.SIZE, seed)
         self.board = map_generator.generate()
         
         self.points = []
@@ -199,7 +198,6 @@ class World:
         for bot in self.bots:
             if self.is_blocked(bot.get_pos()):
                 bot.kill()
-
                 
         for bot in self.bots:
             for point in self.points:
@@ -208,20 +206,12 @@ class World:
 
         self.points = [p for p in self.points if not any(p == bot.pos for bot in self.bots)]
 
-        print("," if self.current_tick != 1 else "", self.state())
 
-
-spin = [2048, 55301, 2050, 55301, 2049, 55301, 2051, 55301, 53248]
-nop = [53248]
-to_zero = [3135, 55296, 18694, 21008, 49408, 51209, 2048, 55301, 53249, 49664, 51213, 2050, 55301, 53249]
-seeker = [3391, 55296, 18694, 21012, 55299, 19206, 21524, 47456, 51214, 52620, 2048, 53267, 2049, 53267, 47744, 52626, 2050, 53267, 2051, 55301, 56071, 53248]
-
-
-world = World([to_zero, nop, spin, seeker])
-
-print('{ "board": ', world.board, ', "turns": [')
-
-for _ in range(400):
-    world.tick()
-
-print("]}")
+    def run_with_log(self, n_ticks, meta={}):
+        out = '{ "meta": ' + str(meta) + ', "board": ' + str(self.board) + ', "turns": ['
+        out += str(self.state())
+        for _ in range(n_ticks):
+            self.tick();
+            out += ', ' + str(self.state())
+        out += ']}'
+        return out
