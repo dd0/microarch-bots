@@ -11,6 +11,7 @@ def main():
     parser.add_argument('--seed', type=int, default=None)
     parser.add_argument('-o', '--output', type=argparse.FileType('w'), default=sys.stdout)
     parser.add_argument('-m', '--map', choices=['empty', 'blocks', 'cave'], default='empty')
+    parser.add_argument('--long', action='store_true')
     args = parser.parse_args()
 
     bots = []
@@ -27,6 +28,10 @@ def main():
         else map.RocksMap if args.map == 'blocks' \
         else map.CaveMap
     world = World(bots, map_generator, args.seed)
+
+    if args.long:
+        World.ENERGY_PER_TURN = 1000
+        World.STARTING_ENERGY = 1000000
 
     meta = {'players': args.players, 'seed': args.seed if args.seed is not None else -1, 'map': args.map}
         
