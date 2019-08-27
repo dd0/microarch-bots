@@ -178,7 +178,7 @@ class World:
                                                         [b.get_pos() for i, b in enumerate(self.bots) if i != me and b.alive()]))
                 if name == 'GET-POINT':
                     if param >= len(self.points):
-                        res = World.INVALID_POS
+                        res = World.encode_pos(World.INVALID_POS)
                     else:
                         res = World.encode_pos(self.points[param])
                     #res = World.encode_pos(World.closest(World.decode_pos(param), self.points))
