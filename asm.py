@@ -17,6 +17,8 @@ def asm_instruction(line):
     
     if instr == 'B':
         opcode, fmt = (25, 'C') if cond else (26, 'O')
+    elif instr == 'BR':
+        opcode, fmt = (28, 'C') if cond else (29, 'O')
     else:
         candidates = [(i, x[1]) for i, x in enumerate(BotCPU.OPERATIONS) if x[0] == instr]
         if len(candidates) == 0:

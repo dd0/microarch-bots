@@ -60,7 +60,9 @@ class BotCPU:
         ('CMP', 'I'),
         ('B', 'C'),
         ('B', 'O'),
-        ('SYSCALL', 'I')
+        ('SYSCALL', 'I'),
+        ('BR', 'C'),
+        ('BR', 'O')
     ]
 
     ARITH = {
@@ -195,6 +197,10 @@ class BotCPU:
             if should_jump:
                 # set two bytes before jump target since we will increment PC (note: cells are 2-byte)
                 self.set_reg(BotCPU.PC, imm - 1)
+        elif name == 'BR':
+            should_jump = BotCPU.COND[cond][1](*self.flags) if fmt == 'C' else True
+            if should_jump:
+                self.set_reg(BotCPU.PC, self.pc() + imm - 1)
         elif name == 'SYSCALL':
             self.regs[R[0]] = syscall_handler(imm, self.regs[R[0]])
         else:
