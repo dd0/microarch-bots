@@ -7,7 +7,7 @@ print('<html><head><link rel="stylesheet" type="text/css" href="/style.css" /></
 
 print("<h1>Partije</h1>")
 print("<table><tr><th>Naziv</th><th>Rezultat</th></tr>")
-for game in os.listdir("logs"):
+for game in sorted(os.listdir("logs")):
     print(f"<tr><td><a href=../visualiser.html?{game}>{game}</a></td><td>...</td></tr>")
 print("</table>")
 
