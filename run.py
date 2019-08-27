@@ -19,7 +19,8 @@ def main():
             code = f.read().strip()
             parsed = []
             for i in range(0, len(code), 4):
-                parsed.append(int(code[i:i+4], 16))
+                if i + 4 <= len(code):
+                    parsed.append(int(code[i:i+4], 16))
             bots.append(parsed)
 
     map_generator = map.Map if args.map == 'empty' \
