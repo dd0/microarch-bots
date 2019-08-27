@@ -5,7 +5,7 @@ var board = [];
 var meta = {};
 var currTurn = 0;
 var autoTimer;
-let playerCol = ['255, 0, 0', '0, 255, 0', '0, 0, 255', '0, 255, 255', '255, 0, 255', '127, 0, 0', '255, 127, 0', '0, 127, 0'];
+let playerCol = ['71, 50, 102', '33, 209, 25', '255, 0, 0', '0, 255, 255', '255, 0, 255', '127, 0, 0', '255, 127, 0', '0, 127, 0'];
 
 function drawGrid(ctx) {
     let b = size / n;
@@ -26,19 +26,19 @@ function drawGrid(ctx) {
                 drawWall(ctx, i, j);
 }
 
-function drawUnit(ctx, i, j, player) {
+function drawUnit(ctx, j, i, player) {
     let b = size / n;
     ctx.fillStyle = 'rgba(' + playerCol[player] + ', 0.7)';
     ctx.fillRect(i*b + 1, j*b + 1, b - 2, b - 2);
 }
 
-function drawPoint(ctx, i, j) {
+function drawPoint(ctx, j, i) {
     let b = size / n;
     ctx.fillStyle = 'rgba(200, 200, 0, 0.5)';
     ctx.fillRect(i*b + 1, j*b + 1, b - 2, b - 2);    
 }
 
-function drawWall(ctx, i, j) {
+function drawWall(ctx, j, i) {
     let b = size / n;
     ctx.fillStyle = 'rgba(60, 60, 60, 0.7)';
     ctx.fillRect(i*b + 1, j*b + 1, b - 2, b - 2);    
@@ -54,7 +54,7 @@ async function loadGame(uri) {
 function friendlyName(name) {
     name = name.replace("programs/", "").replace(".A.bin", "").replace(".B.bin", "").replace(".C.bin", "");
     if(/^player[1-8]$/.exec(name)) {
-        players = ["Robot 1", "Robot 2", "Robot 3", "Robot 4", "Robot 5", "Robot 6", "Robot 7", "Robot 8"];
+        players = ["EJOI ekipica", "Infinity", "Inspekcija", "Robot 4", "Robot 5", "Robot 6", "Robot 7", "Robot 8"];
         name = players[name.substr(6) - 1];
     }
     return name;
