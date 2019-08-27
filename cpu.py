@@ -99,7 +99,7 @@ class BotCPU:
         ('GET-CLOSEST-OTHER', 10, False),
         ('GET-POINT', 5, False),
         ('GET-TILE', 25, False),
-        ('MOVE', 200, True),
+        ('MOVE', 100, True),
         ('YIELD', 0, True),
         ('DEBUG', 0, False)
     ]
