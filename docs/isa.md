@@ -92,6 +92,8 @@ Kod  Instrukcija          Efekat
  25  `B.cond imm`         uslovni skok
  26  `B imm`              bezuslovni skok
  27  `SYSCALL Rx, imm`    interakcija sa svetom
+ 28  `BR.cond imm`        uslovni relativni skok
+ 29  `BR imm`             bezuslovni relativni skok
 
 #### Bezuslovni skok
 
@@ -107,14 +109,28 @@ skočiti na lokaciju `imm` ili ne.
 
 Instrukcija uslovnog skoka je predstavljena kao pet bita sa kodom
 (25), zatim četiri bita koji opisuju uslov koji treba ispuniti da bi
-do skoka došlo, i na kraju adresu. Neki korisni uslovi su:
+do skoka došlo, i na kraju adresu. Neki korisni uslovi, kao i njihova
+imena (`.cond`) su:
 
-* `0000`: Ra == Rb
-* `0001`: Ra != Rb
-* `1010`: Ra >= Rb
-* `1011`: Ra < Rb
-* `1100`: Ra > Rb
-* `1101`: Ra <= Rb
+* `0000`: Ra == Rb (`EQ`)
+* `0001`: Ra != Rb (`NE`)
+* `1010`: Ra >= Rb (`GE`)
+* `1011`: Ra < Rb (`LT`)
+* `1100`: Ra > Rb (`GT`)
+* `1101`: Ra <= Rb (`LE`)
+
+Na primer, sledeći program će skočiti na adresu 15 ukoliko je broj u
+`R1` manji od broja u `R2`:
+
+    CMP R1, R2
+    B.LT 15
+
+Relativni skok `BR` se ponaša isto kao i `B`, osim što je parametar
+`imm` rastojanje između trenutne instrukcije i one koja će se sledeća
+izvršiti. Na primer, `BR 2` će preskočiti jednu instrukciju. Relativni
+skok može biti koristan, na primer, za velike programe kod kojih
+postoje instrukcije u delovima memorije čija adresa ne staje u `imm`
+za "običan" skok.
 
 #### Interakcija sa svetom
 
