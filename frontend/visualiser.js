@@ -56,9 +56,9 @@ async function loadGame(uri) {
 }
 
 function friendlyName(name) {
-    name = name.replace("programs/", "").replace(".A.bin", "").replace(".B.bin", "").replace(".C.bin", "");
+    name = name.replace("programs/", "").replace(".A.hex", "").replace(".B.hex", "").replace(".C.hex", "");
     if(/^player[1-8]$/.exec(name)) {
-        players = ["EJOI ekipica", "Infinity", "Inspekcija", "Robot 4", "Robot 5", "Robot 6", "Robot 7", "Robot 8"];
+        players = ["Robot 1", "Robot 2", "Robot 3", "Robot 4", "Robot 5", "Robot 6", "Robot 7", "Robot 8"];
         name = players[name.substr(6) - 1];
     }
     return name;
