@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" /> 
     <script type="text/javascript" src="visualiser.js"></script>
-    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <style type="text/css">
       body { max-width: unset; }
     </style>
@@ -16,6 +16,10 @@
         </canvas>
       </div>
       <div class="item">
+        <p>
+          <label for="gameFile">Log za vizuelizaciju:</label>
+          <input type="file" id="gameFile" onchange="loadLocal();">
+        </p>
         <p>
           <div id="energies"></div>
         </p>

@@ -44,11 +44,15 @@ function drawWall(ctx, j, i) {
     ctx.fillRect(i*b + 1, j*b + 1, b - 2, b - 2);    
 }
 
+async function parseGame(data) {
+    let json = data.replace(/\n/g, "").replace(/'/g, "\"").replace(/True/g, "true").replace(/False/g, "false").replace(/\(/g, '[').replace(/\)/g, ']');
+    return await JSON.parse(json);
+}
+
 async function loadGame(uri) {
     let response = await fetch(uri, {cache: "reload"});
     let data = await response.text();
-    let json = data.replace(/\n/g, "").replace(/'/g, "\"").replace(/True/g, "true").replace(/False/g, "false").replace(/\(/g, '[').replace(/\)/g, ']');
-    return await JSON.parse(json);
+    return await parseGame(data);
 }
 
 function friendlyName(name) {
@@ -138,5 +142,21 @@ function startAuto() {
 
 function gotoStart() {
     currTurn = 0;
+    drawState(currTurn);
+}
+
+async function loadLocal() {
+    var picker = document.getElementById("gameFile");
+    console.log(picker.files.item(0));
+
+    var reader = new FileReader();
+    reader.onload = async function() {
+        data = await parseGame(reader.result);
+        game = data.turns;
+        board = data.board;
+        meta = data.meta;
+    }
+
+    reader.readAsText(picker.files.item(0));
     drawState(currTurn);
 }
