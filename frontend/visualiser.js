@@ -155,8 +155,9 @@ async function loadLocal() {
         game = data.turns;
         board = data.board;
         meta = data.meta;
+
+        drawState(currTurn);
     }
 
     reader.readAsText(picker.files.item(0));
-    drawState(currTurn);
 }
