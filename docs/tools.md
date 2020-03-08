@@ -2,11 +2,11 @@
 
 ## Arena
 
-Da bi pokrenuli partiju sa robotima čiji programi su `robot1.bin`,
-`robot2.bin` i `robot3.bin`, i sačuvali log partije u `log.txt`:
+Da bi pokrenuli partiju sa robotima čiji programi su `robot1.hex`,
+`robot2.hex` i `robot3.hex`, i sačuvali log partije u `log.txt`:
 
 ~~~ {.bash}
-python run.py robot1.bin robot2.bin robot3.bin -o log.txt
+python run.py robot1.hex robot2.hex robot3.hex -o log.txt
 ~~~
 
 Takođe su na raspolaganju parametri `--seed SEED` (da bi dobili
@@ -17,10 +17,10 @@ od `empty`, `blocks`, `cave`).
 
 Da bi lakše počeli, na raspolaganju je program `asm.py`, koji od fajla
 koji sadrži kod u asembleru za kontroler robota generiše program koji
-arena čita. Da bi fajl `program.S` asemblirali u `robot.bin`:
+arena čita. Da bi fajl `program.S` asemblirali u `robot.hex`:
 
 ~~~ {.bash}
-python asm.py -i program.S -o robot.bin
+python asm.py -i program.S -o robot.hex
 ~~~
 
 Ukoliko jedan od ova dva parametra nedostaje, program čita sa
