@@ -118,7 +118,7 @@ async function init() {
         board = data.board;
         meta = data.meta;
     }
-    drawState(currTurn);
+    gotoStart();
 }
 
 async function drawNext() {
@@ -156,7 +156,7 @@ async function loadLocal() {
         board = data.board;
         meta = data.meta;
 
-        drawState(currTurn);
+        gotoStart();
     }
 
     reader.readAsText(picker.files.item(0));
