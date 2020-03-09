@@ -51,6 +51,11 @@ su dati u opisu instrukcije. Registri su predstavljeni sa tri bita
 poslednji parametar instrukcije broj, svi preostali biti se koriste za
 njega.
 
+**Česta greška**: većina instrukcija koje uzimaju broj kao parametar
+imaju tri parametra (na primer, `ADD Rd, Ra, imm`). Kod njih, za `imm`
+preostaje samo pet bita, tako da ove instrukcije ne podržavaju brojeve
+veće od 31. Dati asembler vas na ovo **neće upozoriti**.
+
 Napomena: instrukcije koje imaju tri registra kao parametre imaju dva
 bita "viška" na kraju, koje procesor ignoriše.
 
